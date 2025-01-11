@@ -1,0 +1,305 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Oswald", serif;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+    padding-top: 7px; 
+}
+
+
+.container {
+    background-color: #fff;
+    padding: 20px;
+    border: 2px solid #000;
+    border-radius: 7px;
+    width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.heading-register {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.heading-welcome {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 40px;
+    font-weight: 400;
+    color: #333;
+    /* background-color: #e0e0e0; */
+    padding: 10px;
+    border-radius: 5px;
+}
+
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-group input:focus {
+    border-color: #000;
+    outline: none;
+}
+
+
+.btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #333;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #555;
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/*Regiter Form Success and Error Message CSS  START*/
+.message {
+    padding: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333;
+}
+
+.message.success {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+}
+
+.message.error {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+/*Regiter Form Success or Error Message CSS  END*/
+
+
+/* Responsive Start*/
+@media (max-width: 768px) {
+    .heading-welcome {
+        font-size: 30px;
+    }
+
+    .heading-register {
+        font-size: 24px;
+    }
+
+    .container {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .heading-welcome {
+        font-size: 26px;
+    }
+
+    .heading-register {
+        font-size: 20px;
+    }
+
+    .container {
+        width: 95%;
+        padding: 10px;
+    }
+
+    .form-group input {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .btn {
+        padding: 10px;
+        font-size: 14px;
+    }
+}
+
+/* Responsive  End*/
+/* Add Post Css START */
+.post-container {
+    width: 1024px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.post-heading {
+    text-align: center;
+}
+
+.post-form-group {
+    margin-bottom: 15px;
+}
+
+.post-lbl {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.post-btn {
+    font-family: "Oswald", serif;
+    font-weight: bolder;
+    width: 120px;
+    
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+}
+.post-success {
+    background-color: #d4edda; 
+    color: #155724; 
+    border: 1px solid #c3e6cb; 
+    padding: 10px; 
+    margin-bottom: 20px; 
+    border-radius: 5px; 
+    font-size: 16px; 
+    text-align: center; 
+}
+.post-error {
+    background-color: #edd4d4; 
+    color: #571515e4; 
+    border: 1px solid #c3e6cb; 
+    padding: 10px; 
+    margin-bottom: 20px; 
+    border-radius: 5px; 
+    font-size: 16px; 
+    text-align: center; 
+}
+/* Add Post Css END */
+
+/* Displaying Posts CSS START*/
+.existing-post-header{
+    text-align: center;
+    color: #333;
+}
+#post-title{
+    color: #333;
+}
+.posts-container{
+    margin-top: 20px;
+}
+.user-post{
+    background: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+.user-post img{
+    max-width: 100%; 
+    height: auto;
+}
+.user-post p{
+    margin: 10px 0;
+}
+.user-post em{
+    font-size: 0.9em; 
+    color: #666;
+}
+/* Displaying Post CSS END*/
+
+/* Edit Post START*/
+
+.post-edit-btn {
+    font-family: "Oswald", serif;
+    display: inline-block; 
+    padding: 10px 15px; 
+    background-color: #007BFF; 
+    color: white; 
+    text-decoration: none; 
+    border-radius: 5px; 
+    transition: background-color 0.3s; 
+}
+
+.post-edit-btn:hover {
+    background-color: #0056b3; 
+}
+.post-delete-btn{
+    font-family: "Oswald", serif;
+    display: inline-block; 
+    padding: 10px 15px; 
+    background-color: #e81919; 
+    color: white; 
+    text-decoration: none; 
+    border-radius: 5px; 
+    transition: background-color 0.3s; 
+}
+.post-delete-btn:hover {
+    background-color: #784444; 
+}
+
+/* Edit Post END*/
+
+/* read More CSS START */
+.read-more {
+    display: inline-block; 
+    margin-top: 10px; 
+    padding: 8px 12px; 
+    background-color: #007BFF; 
+    color: white; 
+    text-decoration: none; 
+    border-radius: 4px; 
+    transition: background-color 0.3s, transform 0.3s; 
+}
+
+.read-more:hover {
+    background-color: #0056b3; 
+    transform: scale(1.05); 
+}
+/*  Read More CSS END*/

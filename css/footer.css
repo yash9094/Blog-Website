@@ -1,0 +1,21 @@
+body{
+    font-family: "Oswald", serif;
+    /* margin-bottom: 4px; */
+}
+.footer{
+    background-color: black;
+    color: black;
+    height: 5px;
+    width: 100vmax;
+    
+}
+.copy-right{
+    
+    /* margin-right: 50%; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 11px;
+    
+}
