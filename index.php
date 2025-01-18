@@ -51,7 +51,7 @@ $totalPages = ceil($totalPosts / $limit);
         <h1>PEOPLE's THOUGHTS</h1>
 
         <form action="index.php" method="GET" id="search-form">
-            <input type="text" name="search" id="search-input" class="search-input" placeholder="Search posts..." value="<?php echo htmlspecialchars($search); ?>">
+            <input type="text" name="search" id="search-input" class="search-input" placeholder="Search posts..." value="<?php echo htmlspecialchars($search); ?>" autocomplete="off">
             <button type="submit" id="search-button" class="search-button">Search</button>
         </form>
 
