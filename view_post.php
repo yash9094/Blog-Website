@@ -6,7 +6,6 @@ include "inc/header.php";
 if (isset($_GET['id'])) {
     $postId = $_GET['id'];
 
-    // Fetch the post data
     $query = "SELECT posts.*, user.username FROM posts 
               JOIN user ON posts.user_id = user.id 
               WHERE posts.id = ?";

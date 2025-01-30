@@ -1,6 +1,6 @@
 <?php
 session_start();
-include "inc/config.php"; // Include your database connection
+include "inc/config.php"; 
 $message = ''; 
 
 if (isset($_GET['registered']) && $_GET['registered'] == 'true') {
@@ -13,35 +13,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Prepare the SQL statement
     $stmt = $conn->prepare("SELECT * FROM user WHERE username = ?");
-    $stmt->bind_param("s", $username); // "s" indicates the type is string
+    $stmt->bind_param("s", $username); 
     $stmt->execute();
     $result = $stmt->get_result();
     $user = $result->fetch_assoc();
 
     // Verify the password
     if ($user && password_verify($password, $user['password'])) {
-        // Store user information in session
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['username'] = $user['username'];
-        $_SESSION['role'] = $user['role']; // Store the user's role
+        $_SESSION['role'] = $user['role']; 
 
-        // Redirect based on user role
+      
         if ($user['role'] === 'admin') {
-            header("Location: admin_dashboard.php"); // Redirect to admin dashboard
+            header("Location: admin_dashboard.php"); 
         } elseif ($user['role'] === 'editor') {
-            header("Location:index.php"); // Redirect to editor dashboard
+            header("Location:index.php"); 
         } else {
-            header("Location:unauthorize_page.php"); // Redirect to homepage for viewers
+            header("Location:unauthorize_page.php"); 
         }
         exit();
     } else {
         $message = "Invalid username or password!";
     }
 
-    $stmt->close(); // Close the statement
+    $stmt->close(); 
 }
 
-$conn->close(); // Close the connection
+$conn->close();
 ?>
 
 <!DOCTYPE html>

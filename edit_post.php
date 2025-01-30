@@ -7,12 +7,10 @@ $title = "";
 $content = "";
 $error = "";
 
-// Checking if post ID is provided
 if (isset($_GET['id'])) {
     $postId = $_GET['id'];
     $userId = $_SESSION['user_id'];
 
-    // Fetching data from the database
     $query = "SELECT * FROM posts WHERE id = ? AND user_id = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("ii", $postId, $userId);
@@ -27,11 +25,10 @@ if (isset($_GET['id'])) {
         $error = "Post not found.";
     }
 } else {
-    header("Location: add_post.php"); // Redirect if no post ID is provided
+    header("Location: add_post.php"); 
     exit();
 }
 
-// Handling Update Post Form Submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $title = $_POST['title'];
     $content = $_POST['content'];
@@ -66,19 +63,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $uploadOk = 0;
             }
 
-            // If upload is okay, process the image
+            
             if ($uploadOk == 0) {
                 $error = "Sorry, your image was not uploaded.";
             } else {
-                // Read the image content
+
                 $imageData = file_get_contents($image["tmp_name"]);
-                $encodedImage = base64_encode($imageData); // Base64 encode the image data
-                // Append the encoded image to the content
+                $encodedImage = base64_encode($imageData); 
                 $content .= "<img src='data:image/jpeg;base64,{$encodedImage}' alt='Post Image' />";
             }
         }
 
-        // Prepare and execute the Posts update
         $stmt = $conn->prepare("UPDATE posts SET title = ?, content = ? WHERE id = ? AND user_id = ?");
         $stmt->bind_param("ssii", $title, $content, $postId, $userId);
 

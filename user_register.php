@@ -1,6 +1,6 @@
 <?php
 session_start();
-include "inc/config.php"; // Include your database connection
+include "inc/config.php"; 
 $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -32,9 +32,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errors[] = "Password must be at least 8 characters long.";
     }
 
-    // Check if there are any validation errors
+    
     if (empty($errors)) {
-        // Check if username or email already exists
+        
         $checkQuery = "SELECT * FROM user WHERE username = ? OR email = ?";
         $stmt = $conn->prepare($checkQuery);
         $stmt->bind_param("ss", $username, $email);
@@ -44,9 +44,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($checkResult->num_rows > 0) {
             $message = "Username or Email already exists!";
         } else {
-            // Insert query
+           
             $passwordHash = password_hash($password, PASSWORD_DEFAULT); 
-            $role = 'editor'; // This is the default role of users.
+            $role = 'editor'; 
             $sql = "INSERT INTO user (fullname, username, email, password, role) VALUES (?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("sssss", $fullname, $username, $email, $passwordHash, $role);
@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
     } else {
-        // If there are errors, display them
+       
         $message = implode("<br>", $errors);
     }
 

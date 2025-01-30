@@ -1,22 +1,18 @@
 <?php
 session_start();
-// Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: user_login.php"); // Redirect to login page if not logged in
+    header("Location: user_login.php"); 
     exit();
 }
 
 include "inc/config.php";
 include "inc/header.php";
 
-// Initialize variables for form data
 $title = "";
 $content = "";
 $error = "";
 
-// Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Get the form data
     $title = $_POST['title'];
     $content = $_POST['content'];
     $image = $_FILES['image'];
@@ -54,15 +50,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($uploadOk == 0) {
                 $error = "Sorry, your image was not uploaded.";
             } else {
-                // Read the image content
                 $imageData = file_get_contents($image["tmp_name"]);
-                $encodedImage = base64_encode($imageData); // Base64 encode the image data
-                // Append the encoded image to the content
+                $encodedImage = base64_encode($imageData);
                 $content .= "<img src='data:image/jpeg;base64,{$encodedImage}' alt='Post Image' />";
             }
         }
 
-        // Prepare the SQL statement
         $stmt = $conn->prepare("INSERT INTO posts (title, content, user_id) VALUES (?, ?, ?)");
         $userId = $_SESSION['user_id'];
         $stmt->bind_param("ssi", $title, $content, $userId);
@@ -77,10 +70,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// Displaying Posts of User
-// Fetch posts from the database
-$userId = $_SESSION['user_id']; 
-$query = "SELECT * FROM posts WHERE user_id = ? ORDER BY created_at DESC"; 
+
+$userId = $_SESSION['user_id'];
+$query = "SELECT * FROM posts WHERE user_id = ? ORDER BY created_at DESC";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $userId);
 $stmt->execute();
@@ -98,7 +90,7 @@ $result = $stmt->get_result();
 </head>
 
 <body>
-<div id="toast" class="toast"></div>
+    <div id="toast" class="toast"></div>
     <div class="post-container">
         <?php if (isset($_SESSION['success_message'])): ?>
             <div class="post-success"><?php echo $_SESSION['success_message']; ?></div>
@@ -115,18 +107,18 @@ $result = $stmt->get_result();
                 <label for="title" class="post-lbl">Title:</label>
                 <input type="text" id="title" name="title" value="<?php echo htmlspecialchars($title); ?>" required>
             </div <div class="post-form-group">
-                <label for="content" class="post-lbl">Content:</label>
-                <textarea id="content" name="content" rows="10" required><?php echo htmlspecialchars($content); ?></textarea>
-            </div>
-            <div class="post-form-group">
-                <label for="image">Image (optional):</label>
-                <input type="file" id="image" name="image" accept="image/*">
-            </div>
-            <button type="submit" class="post-btn">Add Post</button>
-        </form>
+            <label for="content" class="post-lbl">Content:</label>
+            <textarea id="content" name="content" rows="10" required><?php echo htmlspecialchars($content); ?></textarea>
+    </div>
+    <div class="post-form-group">
+        <label for="image">Image (optional):</label>
+        <input type="file" id="image" name="image" accept="image/*">
+    </div>
+    <button type="submit" class="post-btn">Add Post</button>
+    </form>
 
-        <h2 class="existing-post-header">Your Posts</h2>
-        <div class="posts-container">
+    <h2 class="existing-post-header">Your Posts</h2>
+    <div class="posts-container">
         <?php if ($result->num_rows > 0): ?>
             <?php while ($row = $result->fetch_assoc()): ?>
                 <div class="user-post">
@@ -145,14 +137,14 @@ $result = $stmt->get_result();
         <?php else: ?>
             <p>You Have No Post Yet!</p>
         <?php endif; ?>
-        </div>
+    </div>
 
     </div>
-    
+
 </body>
 
 <?php
 include "inc/footer.php";
 ?>
 
-</html> 
+</html>
