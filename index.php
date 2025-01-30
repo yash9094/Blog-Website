@@ -3,21 +3,21 @@ session_start();
 include "inc/config.php";
 include "inc/header.php";
 
-// Get the logged-in user's ID
+
 $userId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 
 
-// Initialize search variable
+
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 
-// Pagination variables
+
 $limit = 5; // Number of posts per page
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $offset = ($page - 1) * $limit;
 
-// Fetch all post
+
 if ($userId) {
-    // User is logged in, exclude their posts
+   
     $query = "SELECT posts.*, user.username FROM posts 
               JOIN user ON posts.user_id = user.id 
               WHERE posts.user_id != ? AND (posts.title LIKE ? OR posts.content LIKE ?) 
@@ -26,7 +26,7 @@ if ($userId) {
     $searchTerm = '%' . $search . '%';
     $stmt->bind_param("issii", $userId, $searchTerm, $searchTerm, $limit, $offset);
 } else {
-    // User is not logged in, show all posts
+    
     $query = "SELECT posts.*, user.username FROM posts 
               JOIN user ON posts.user_id = user.id 
               WHERE (posts.title LIKE ? OR posts.content LIKE ?) 
@@ -38,7 +38,7 @@ if ($userId) {
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Fetch total number of posts for pagination
+
 $totalQuery = "SELECT COUNT(*) as total FROM posts WHERE user_id != ? AND (title LIKE ? OR content LIKE ?)";
 $totalStmt = $conn->prepare($totalQuery);
 $totalStmt->bind_param("iss", $userId, $searchTerm, $searchTerm);
@@ -74,8 +74,8 @@ $totalPages = ceil($totalPosts / $limit);
                     <p><strong>Posted by: <?php echo htmlspecialchars($row['username']); ?></strong></p>
                     <p>
                         <?php
-                        // Display a truncated version of the content
-                        $content = strip_tags($row['content']); // Remove HTML tags
+                       
+                        $content = strip_tags($row['content']);
                         $truncatedContent = strlen($content) > 150 ? substr($content, 0, 150) . '...' : $content;
                         echo nl2br(htmlspecialchars($truncatedContent));
                         ?>
