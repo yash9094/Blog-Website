@@ -46,26 +46,26 @@ $stats = [
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const ctx = document.createElement('canvas');
-    ctx.style.marginTop = '2rem';
-    document.querySelector('.main-content').appendChild (ctx);
+    // const ctx = document.createElement('canvas');
+    // ctx.style.marginTop = '2rem';
+    // document.querySelector('.main-content').appendChild (ctx);
     
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ['Users', 'Posts', 'Comments'],
-            datasets: [{
-                label: 'Site Statistics',
-                data: [
-                    <?php echo $stats['total_users']; ?>,
-                    <?php echo $stats['total_posts']; ?>,
-                    0 // Replace with actual comment count
-                ],
-                borderColor: '#3498db',
-                tension: 0.1
-            }]
-        }
-    });
+    // new Chart(ctx, {
+    //     type: 'line',
+    //     data: {
+    //         labels: ['Users', 'Posts', 'Comments'],
+    //         datasets: [{
+    //             label: 'Site Statistics',
+    //             data: [
+    //                 <?php echo $stats['total_users']; ?>,
+    //                 <?php echo $stats['total_posts']; ?>,
+    //                 0 // Replace with actual comment count
+    //             ],
+    //             borderColor: '#3498db',
+    //             tension: 0.1
+    //         }]
+    //     }
+    // });
 </script>
 </div> 
 </div> 
