@@ -1,5 +1,10 @@
 <?php
 session_start();
+// Check if the user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: user_login.php"); // Redirect to login page if not logged in
+    exit();
+}
 
 include "inc/config.php";
 include "inc/header.php";
@@ -57,15 +62,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
 
-        
+        // Prepare the SQL statement
         $stmt = $conn->prepare("INSERT INTO posts (title, content, user_id) VALUES (?, ?, ?)");
         $userId = $_SESSION['user_id'];
-        $stmt->bind_param("ssi", $title, $content,$userId);
+        $stmt->bind_param("ssi", $title, $content, $userId);
 
         if ($stmt->execute()) {
-
             $_SESSION['success_message'] = "Post uploaded successfully!";
-        
             header("Location: add_post.php");
             exit();
         } else {
@@ -99,7 +102,7 @@ $result = $stmt->get_result();
     <div class="post-container">
         <?php if (isset($_SESSION['success_message'])): ?>
             <div class="post-success"><?php echo $_SESSION['success_message']; ?></div>
-            <?php unset($_SESSION['success_message']);  ?>
+            <?php unset($_SESSION['success_message']); ?>
         <?php endif; ?>
 
         <?php if ($error): ?>
@@ -110,11 +113,10 @@ $result = $stmt->get_result();
         <form action="add_post.php" method="POST" enctype="multipart/form-data">
             <div class="post-form-group">
                 <label for="title" class="post-lbl">Title:</label>
-                <input type="text" id="title" name="title" value="<?php echo htmlspecialchars($title); ?>">
-            </div>
-            <div class="post-form-group">
+                <input type="text" id="title" name="title" value="<?php echo htmlspecialchars($title); ?>" required>
+            </div <div class="post-form-group">
                 <label for="content" class="post-lbl">Content:</label>
-                <textarea id="content" name="content" rows="10"><?php echo htmlspecialchars($content); ?></textarea>
+                <textarea id="content" name="content" rows="10" required><?php echo htmlspecialchars($content); ?></textarea>
             </div>
             <div class="post-form-group">
                 <label for="image">Image (optional):</label>
@@ -131,7 +133,6 @@ $result = $stmt->get_result();
                     <h3 id="post-title"><?php echo htmlspecialchars($row['title']); ?></h3>
                     <p>
                         <?php
-                    
                         echo nl2br(htmlspecialchars($row['content']));
                         ?>
                     </p>
@@ -141,18 +142,17 @@ $result = $stmt->get_result();
                     <a href="delete_post.php?id=<?php echo $row['id']; ?>" class="post-delete-btn" onclick="return confirm('Are you sure you want to delete this post?');">Delete</a>
                 </div>
             <?php endwhile; ?>
-            <?php else: ?>
-                <p>You Have No Post Yet!</p>
-            <?php endif; ?>
+        <?php else: ?>
+            <p>You Have No Post Yet!</p>
+        <?php endif; ?>
         </div>
 
     </div>
     
-       
 </body>
 
 <?php
 include "inc/footer.php";
 ?>
 
-</html>
+</html> 

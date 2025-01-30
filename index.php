@@ -16,13 +16,25 @@ $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $offset = ($page - 1) * $limit;
 
 // Fetch all post
-$query = "SELECT posts.*, user.username FROM posts 
-          JOIN user ON posts.user_id = user.id 
-          WHERE posts.user_id != ? AND (posts.title LIKE ? OR posts.content LIKE ?) 
-          ORDER BY posts.created_at DESC LIMIT ? OFFSET ?";
-$stmt = $conn->prepare($query);
-$searchTerm = '%' . $search . '%';
-$stmt->bind_param("issii", $userId, $searchTerm, $searchTerm, $limit, $offset);
+if ($userId) {
+    // User is logged in, exclude their posts
+    $query = "SELECT posts.*, user.username FROM posts 
+              JOIN user ON posts.user_id = user.id 
+              WHERE posts.user_id != ? AND (posts.title LIKE ? OR posts.content LIKE ?) 
+              ORDER BY posts.created_at DESC LIMIT ? OFFSET ?";
+    $stmt = $conn->prepare($query);
+    $searchTerm = '%' . $search . '%';
+    $stmt->bind_param("issii", $userId, $searchTerm, $searchTerm, $limit, $offset);
+} else {
+    // User is not logged in, show all posts
+    $query = "SELECT posts.*, user.username FROM posts 
+              JOIN user ON posts.user_id = user.id 
+              WHERE (posts.title LIKE ? OR posts.content LIKE ?) 
+              ORDER BY posts.created_at DESC LIMIT ? OFFSET ?";
+    $stmt = $conn->prepare($query);
+    $searchTerm = '%' . $search . '%';
+    $stmt->bind_param("ssii", $searchTerm, $searchTerm, $limit, $offset);
+}
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -68,7 +80,11 @@ $totalPages = ceil($totalPosts / $limit);
                         echo nl2br(htmlspecialchars($truncatedContent));
                         ?>
                     </p>
+                    <?php if ($userId): ?>
                     <a href="view_post.php?id=<?php echo $row['id']; ?>" class="read-more">Read More</a>
+                    <?php else: ?>
+                        <a href="user_login.php" class="read-more">Read More (Login Required)</a>
+                    <?php endif; ?>
                 </div>
             <?php endwhile; ?>
         <?php else: ?>

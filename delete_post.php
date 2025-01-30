@@ -22,6 +22,8 @@ if (isset($_GET['id'])) {
     } else {
         $_SESSION['error_message'] = "Error deleting post: " . $stmt->error;
     }
+
+    $stmt->close(); // Close the statement
 } else {
     $_SESSION['error_message'] = "No post ID provided.";
 }

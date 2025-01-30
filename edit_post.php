@@ -1,19 +1,18 @@
 <?php
 session_start();
-
 include "inc/config.php";
 include "inc/header.php";
 
-$title="";
-$content="";
-$error="";
+$title = "";
+$content = "";
+$error = "";
 
-//checking for if id post ID Is Provided
+// Checking if post ID is provided
 if (isset($_GET['id'])) {
     $postId = $_GET['id'];
     $userId = $_SESSION['user_id'];
 
-    //Fetching Data from databas
+    // Fetching data from the database
     $query = "SELECT * FROM posts WHERE id = ? AND user_id = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("ii", $postId, $userId);
@@ -32,9 +31,8 @@ if (isset($_GET['id'])) {
     exit();
 }
 
-//Handling Update Post Form Submission
+// Handling Update Post Form Submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // $postId = $_POST['post_id'];
     $title = $_POST['title'];
     $content = $_POST['content'];
     $image = $_FILES['image'];
@@ -45,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $encodedImage = null;
 
-        // Image Handling (similar to above)
+        // Image Handling
         if (!empty($image['name'])) {
             $uploadOk = 1;
 
@@ -93,8 +91,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
-
-
 ?>
 
 <!DOCTYPE html>
@@ -111,7 +107,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="post-container">
         <?php if (isset($_SESSION['success_message'])): ?>
             <div class="post-success"><?php echo $_SESSION['success_message']; ?></div>
-            <?php unset($_SESSION['success_message']);  ?>
+            <?php unset($_SESSION['success_message']); ?>
         <?php endif; ?>
 
         <?php if ($error): ?>
@@ -119,9 +115,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php endif; ?>
         <h1 class="post-heading">Edit Post</h1>
 
-        <form action="edit_post.php?id=<?php echo $postId;?>" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="post_id" value="<?php echo $postId; ?>">
-            <div class="post-form-group">
+        <form action="edit_post.php?id=<?php echo $postId; ?>" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="post_id" value="<?php echo $postId; ?>">
+            <div class="post-form -group">
                 <label for="title" class="post-lbl">Title:</label>
                 <input type="text" id="title" name="title" value="<?php echo htmlspecialchars($title); ?>">
             </div>
@@ -135,14 +131,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <button type="submit" class="post-btn">Edit Post</button>
         </form>
-
-        
-
     </div>
 </body>
 
 <?php
 include "inc/footer.php";
 ?>
-
 </html>

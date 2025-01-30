@@ -1,36 +1,73 @@
 <?php
 session_start();
-include "inc/config.php";
+include "inc/config.php"; // Include your database connection
 $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $fullname = $_POST['fullname'];
-    $username = $_POST['username'];
-    $email = $_POST['email'];
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // password_hash for secure password hashing
+    $fullname = trim($_POST['fullname']);
+    $username = trim($_POST['username']);
+    $email = trim($_POST['email']);
+    $password = $_POST['password']; 
 
-    // if username or email already exists
-    $checkQuery = "SELECT * FROM user WHERE username='$username' OR email='$email'";
-    $checkResult = mysqli_query($conn, $checkQuery);
+    // Server-side validation
+    $errors = [];
 
-    if (mysqli_num_rows($checkResult) > 0) {
-        $message = "Username or Email already exists!";
-    } else {
-        // Insert query
-        $sql = "INSERT INTO user (fullname, username, email, password) VALUES ('$fullname', '$username', '$email', '$password')";
-        if (mysqli_query($conn, $sql)) {
-            $message = "Registration successful!";
-            header("Location: user_login.php?registered=true");
-            exit();
-        } else {
-            echo "Error: " . mysqli_error($conn);
-        }
+    // Fullname Validation
+    if (empty($fullname) || !preg_match("/^[a-zA-Z\s]+$/", $fullname)) {
+        $errors[] = "Please enter a valid fullname (letters and spaces only).";
     }
 
-    mysqli_close($conn);
-}
-?>
+    // Username Validation
+    if (strlen($username) < 5) {
+        $errors[] = "Username must be at least 5 characters long.";
+    }
 
+    // Email Validation
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = "Please enter a valid email address.";
+    }
+
+    // Password Validation
+    if (strlen($password) < 8) {
+        $errors[] = "Password must be at least 8 characters long.";
+    }
+
+    // Check if there are any validation errors
+    if (empty($errors)) {
+        // Check if username or email already exists
+        $checkQuery = "SELECT * FROM user WHERE username = ? OR email = ?";
+        $stmt = $conn->prepare($checkQuery);
+        $stmt->bind_param("ss", $username, $email);
+        $stmt->execute();
+        $checkResult = $stmt->get_result();
+
+        if ($checkResult->num_rows > 0) {
+            $message = "Username or Email already exists!";
+        } else {
+            // Insert query
+            $passwordHash = password_hash($password, PASSWORD_DEFAULT); 
+            $role = 'editor'; // This is the default role of users.
+            $sql = "INSERT INTO user (fullname, username, email, password, role) VALUES (?, ?, ?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("sssss", $fullname, $username, $email, $passwordHash, $role);
+            if ($stmt->execute()) {
+                $message = "Registration successful!";
+                header("Location: user_login.php?registered=true");
+                exit();
+            } else {
+                $message = "Error: " . $stmt->error;
+            }
+        }
+    } else {
+        // If there are errors, display them
+        $message = implode("<br>", $errors);
+    }
+
+    $stmt->close(); 
+}
+
+$conn->close(); 
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -38,55 +75,54 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Register-People's Thoughts</title>
-    <!--Google Font-->
+    <title>User Register - People's Thoughts</title>
+    <!-- Google Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
-    <!--Google Font-->
+    <!-- Google Font -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-<h1 class="heading-welcome">Welcome To,PEOPLE'S THOUGHTS</h1>
+    <h1 class="heading-welcome">Welcome To, PEOPLE'S THOUGHTS</h1>
 
     <div class="container">
-        
         <form id="registerForm" action="user_register.php" method="POST">
-        <h1 class="heading-register">REGISTER</h1>
-        <?php if (!empty($message)): ?>
-            <div class="message <?php echo (strpos($message, 'successful') !== false) ? 'success' : 'error'; ?>">
-                <?php echo $message; ?>
-            </div>
-        <?php endif; ?>
+            <h1 class="heading-register">REGISTER</h1>
+            <?php if (!empty($message)): ?>
+                <div class="message <?php echo (strpos($message, 'successful') !== false) ? 'success' : 'error'; ?>">
+                    <?php echo $message; ?>
+                </div>
+            <?php endif; ?>
             <div class="form-group">
                 <label for="fullname">Fullname</label>
-                <input type="text" id="fullname" name="fullname" placeholder="Enter your fullname" autocomplete="off">
+                <input type="text" id="fullname" name="fullname" placeholder="Enter your fullname" required autocomplete="off">
                 <small id="fullnameError" class="error-message"></small>
             </div>
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" id="username" name="username" placeholder="Enter your username" autocomplete="off">
+                <input type="text" id="username" name="username" placeholder="Enter your username" required autocomplete="off">
                 <small id="usernameError" class="error-message"></small>
             </div>
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="Enter your email" autocomplete="off">
+                <input type="email" id="email" name="email" placeholder="Enter your email" required autocomplete="off">
                 <small id="emailError" class="error-message"></small>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Enter your password" autocomplete="off">
+                <input type="password" id="password" name="password" placeholder="Enter your password" required autocomplete="off">
                 <small id="passwordError" class="error-message"></small>
             </div>
             <div class="form-group">
                 <button type="submit" class="btn">Register</button>
-                <p>Alredy User ?<a href="user_login.php">Login</a></p>
+                <p>Already a User? <a href="user_login.php">Login</a></p>
             </div>
         </form>
     </div>
 
-<script src="js/script.js"></script>
+    <script src="js/script.js"></script>
 </body>
 
 </html>

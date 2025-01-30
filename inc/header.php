@@ -22,18 +22,20 @@ include "inc/config.php"
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <a href="#" class="logo">People's Thoughts</a>
+            <a href="index.php" class="logo">People's Thoughts</a>
             <ul class="nav-links">
                 <li><a href="index.php">Home</a></li>
                 <li><a href="add_post.php">Posts</a></li>
-                <li><a href="about.php">About</a></li>
-                <li><a href="contact.php">Contact</a></li>
-                <?php if (isset($_SESSION['username'])):?>
-                <li>Welcome,<?php echo htmlspecialchars($_SESSION['username']);?></li>
-                <li><a href="logout.php">Logout</a></li>
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    <li><a href="about.php">About</a></li>
+                    <li><a href="contact.php">Contact</a></li>
+                    <li>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?></li>
+                    <li><a href="logout.php">Logout</a></li>
                 <?php else: ?>
-                <li><a href="user_login.php">Login</a></li>
-                <?php endif;?>
+                    <li><a href="user_login.php">Login</a></li>
+                    <li><a href="user_login.php">About</a></li>
+                    <li><a href="user_login.php">Contact</a></li>
+                <?php endif; ?>
             </ul>
             <div class="menu-toggle" id="mobile-menu">
                 <span class="bar"></span>
