@@ -358,3 +358,43 @@ textarea {
     transform: scale(1.05); 
 }
 /*  Read More CSS END*/
+/* ABout Page CSS STart */
+.about-container {
+    display: flex;
+    height: 100vh; 
+}
+
+.about-info-section {
+    flex: 1; 
+    padding: 20px;
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+    text-align: center; 
+}
+#about-header {
+    margin-bottom: 20px;
+}
+.about-para {
+    line-height: 1.6; 
+}
+/* ABout Page CSS ENd*/
+/* Contact-US CSS START */
+.contact-container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center; 
+}
+#contact-title {
+    color: #333;
+}
+#contact-info {
+    line-height: 1.6;
+    color: #555;
+    margin-top: 20px;
+}
+/* Contact-Us CSS End */
